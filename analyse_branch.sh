@@ -1,5 +1,28 @@
 #!/bin/bash
 
+# Usage
+#
+# Call from within a git repo
+# analyse_branch.sh [<feature_branch>] [<upstream_branch>]...
+#
+# Parameters:
+# <feature_branch> is the name of the branch to analyse in relation to <upstream_branch>s
+# <upstream_branch> is each upstream branch to relate <feature_branch> to
+#
+# If no params passed then feature_branch will default to HEAD
+# if no upstream_branch params passed then defaults to "master"
+#
+# Usage examples:
+# analyse_branch.sh fix_some_important_issue
+# would analyse branch fix_some_important_issue in relation to master
+#
+# analyse_branch.sh fix_some_important_issue master qa
+# would analyse branch fix_some_important_issue in relation to master and qa
+#
+# analyse_branch.sh
+# would analyse the current branch in relation to master
+
+
 # Formatting vars
 f_bold=$(tput bold)
 f_und=$(tput smul)
