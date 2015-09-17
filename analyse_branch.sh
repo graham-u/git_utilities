@@ -11,7 +11,8 @@ if [ $# -gt 1 ]; then
   shift
   upsteam_brs=$@
 else
-  upsteam_brs="master develop qa"
+  # @TODO bring in defaults from uncommitted config file
+  upsteam_brs="master"
 fi
 
 if [ $feature_br = "HEAD" ]; then
