@@ -46,6 +46,15 @@ if [ $feature_br = "HEAD" ]; then
     feature_br=$(git symbolic-ref --short HEAD)
 fi
 
+# Check that feature branch is not included in upstream branches as this will cause an error
+for branch in $upsteam_brs; do
+    if [ "$branch" = "$feature_br" ]; then
+        echo "Cannot proceed with branch [$branch] both as the feature branch and an upstream branch"
+        exit 1;
+    fi
+done
+
+
 git_initial_fork_point () {
     # thanks to http://stackoverflow.com/a/4991675/14162
     diff -u <(git rev-list --first-parent "${1:-master}") <(git rev-list --first-parent "${2:-HEAD}") | sed -ne "s/^ //p" | head -1
