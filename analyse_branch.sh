@@ -1,14 +1,13 @@
 #!/bin/bash
 
-#set -x
 feature_br=${1:-HEAD}
-
 
 git_initial_fork_point () {
     # thanks to http://stackoverflow.com/a/4991675/14162
     diff -u <(git rev-list --first-parent "${1:-master}") <(git rev-list --first-parent "${2:-HEAD}") | sed -ne "s/^ //p" | head -1
 }
 
+# @TODO enable upstream branches as parameters to script 
 for upstream_br in master develop qa; do
     initial_fork_point=$(git_initial_fork_point $upstream_br $feature_br)
     distance_to_intial_fork_point=$(git rev-list $feature_br ^$initial_fork_point --count)
