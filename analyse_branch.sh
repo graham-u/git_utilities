@@ -27,6 +27,10 @@
 f_bold=$(tput bold)
 f_und=$(tput smul)
 f_normal=$(tput sgr0)
+f_col1=$(tput setf 1)
+f_col2=$(tput setf 2)
+f_col3=$(tput setf 3)
+f_col4=$(tput setf 4)
 
 feature_br=${1:-HEAD}
 
@@ -47,6 +51,8 @@ git_initial_fork_point () {
     diff -u <(git rev-list --first-parent "${1:-master}") <(git rev-list --first-parent "${2:-HEAD}") | sed -ne "s/^ //p" | head -1
 }
 
+echo -e "${f_bold}Analysis of branch: ${f_und}${feature_br}${f_normal}\n"
+
 for upstream_br in $upsteam_brs; do
     initial_fork_point=$(git rev-parse --short $(git_initial_fork_point $upstream_br $feature_br))
     time_ago_to_initial_fork=$(git log -n1 $initial_fork_point --format="%ar")
@@ -62,12 +68,12 @@ for upstream_br in $upsteam_brs; do
       branch_with_most_recent_initial_fork=$upstream_br
     fi
 
-    echo -e "${f_bold}$feature_br in relation to ${f_und}$upstream_br${f_normal}"
-    echo -e "Was forked from an ancestor of $upstream_br $distance_to_intial_fork_point commits ago at $initial_fork_point ($time_ago_to_initial_fork)"
-    echo -e "Has most recent common ancestor (merge-base) with $upstream_br $time_ago_to_merge_base at $merge_base"
-    echo -e "Distance to merge-base from $feature_br is $distance_to_merge_base_from_feature_br commits"
-    echo -e "Distance to merge-base from $upstream_br's $distance_to_merge_base_from_upstream_br commits"
+    echo -e "${f_col1}$feature_br in relation to ${f_und}$upstream_br${f_normal}"
+    echo -e "Was forked from an ancestor of $upstream_br ${f_col4}$distance_to_intial_fork_point commits ago${f_normal} at ${f_col2}$initial_fork_point${f_normal} (${f_col3}${time_ago_to_initial_fork})${f_normal}"
+    echo -e "Has most recent common ancestor (merge-base) with $upstream_br ${f_col3}${time_ago_to_merge_base}${f_normal} at ${f_col2}${merge_base}${f_normal}"
+    echo -e "Distance to merge-base from ${feature_br} is ${f_col4}${distance_to_merge_base_from_feature_br} commits${f_normal}"
+    echo -e "Distance to merge-base from ${upstream_br}${f_normal} is ${f_col4}${distance_to_merge_base_from_upstream_br} commits${f_normal}"
     echo -e "\n";
 done
 
-echo "Based on intial fork points from branches [$upsteam_brs], looks like $feature_br was forked from $branch_with_most_recent_initial_fork"
+echo "Based on intial fork points from branches [$upsteam_brs], looks like $feature_br was forked from ${f_col2}${branch_with_most_recent_initial_fork}${f_normal}"
